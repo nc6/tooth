@@ -40,11 +40,11 @@ combIndexSorted :: (UV.Unbox a, Ord a)
                 => UV.Vector a -- Alphabet of length N
                 -> UV.Vector a -- element of length K
                 -> Maybe Int -- Index in C_K^A
-combIndexSorted alpha x | UV.length x > UV.length alpha = Nothing -- Require that the alphabet is bigger than the element!
+combIndexSorted alpha x | UV.length x > UV.length alpha = Nothing
 combIndexSorted alpha x = do
     x_idx <- m_x_idx
     return $ UV.sum
-           . UV.map (\k -> inner_sum k x_idx)
+           . UV.map (flip inner_sum x_idx)
            $ UV.enumFromN 0 cap_k
   where
     m_x_idx = UV.mapM (flip UV.elemIndex alpha) x
